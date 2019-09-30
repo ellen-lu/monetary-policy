@@ -1,0 +1,64 @@
+CON1.OUT
+CONSENSUS MODEL WITH HETEROGENEOUS INTERCEPTS
+
+SWEDEN
+
+1) ESTIMATES OF NONLINEAR MODEL
+Coefficients: 
+         3.57769          1.36581         0.541326        -0.602995         0.858558 
+
+Standard errors
+        0.248649         0.259542         0.125818         0.241226         0.122386 
+
+T statistics
+         14.3885          5.26238          4.30245         -2.49971          7.01518 
+
+Log Likelihood function        -63.2410 
+
+AIC         136.482 
+
+SIC         148.329 
+
+RMSE        0.254653 
+MAE         0.180140 
+
+
+2) ESTIMATES OF LINEAR MODEL
+Valid cases:                    79      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                   51.100      Degrees of freedom:                  76
+R-squared:                   0.457      Rbar-squared:                     0.442
+Residual SS:                27.771      Std error of est:                 0.604
+F(2,76):                    31.923      Probability of F:                 0.000
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     2.515020    0.111693   22.517188     0.000       ---         ---  
+X1           0.468799    0.074523    6.290622     0.000    0.548777    0.618024
+X2          -0.476547    0.147545   -3.229829     0.002   -0.281762   -0.416632
+
+RMSE        0.592897 
+MAE         0.493944 
+R2          0.456548 
+
+
+3) ESTIMATES OF LINEAR MODEL WITH AD HOC SMOOTHING
+Valid cases:                    79      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                   51.100      Degrees of freedom:                  75
+R-squared:                   0.953      Rbar-squared:                     0.952
+Residual SS:                 2.379      Std error of est:                 0.178
+F(3,75):                   512.101      Probability of F:                 0.000
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     0.164544    0.089347    1.841622     0.069       ---         ---  
+X1           0.930285    0.032877   28.296041     0.000    0.929629    0.974935
+X2           0.041877    0.026639    1.571988     0.120    0.049021    0.618024
+X3          -0.068319    0.045799   -1.491721     0.140   -0.040394   -0.416632
+
+RMSE        0.173516 
+MAE         0.115421 
+R2          0.953454 

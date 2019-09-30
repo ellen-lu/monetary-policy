@@ -1,0 +1,25 @@
+SIMPLE1.OUT
+SIMPLE MAJORITY MODEL WITH HETEROGENEOUS INTERCEPTS
+
+USA (GREENSPAN)
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+         1.77503         0.985324         -2.79392          1.53767 
+
+Standard errors
+        0.392400         0.124748         0.501480        0.0865014 
+
+T statistics
+         4.52352          7.89853         -5.57134          17.7763 
+
+Log Likelihood function        -292.175 
+
+AIC         592.349 
+
+SIC         604.600 
+
+RMSE         1.53767 
+MAE          1.29143 
+R2          0.485272 
+        0.267856 

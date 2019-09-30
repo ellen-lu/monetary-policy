@@ -1,0 +1,24 @@
+ADHOC1.OUT
+MODEL WITH ADHOC SMOOTHING AND HETEROGENEOUS INTERCEPTS
+
+USA (GREENSPAN)
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+        0.179256         0.968560       -0.0155222        -0.395121         0.252149 
+
+Standard errors
+       0.0677281        0.0128092        0.0243690        0.0881417        0.0141847 
+
+T statistics
+         2.64670          75.6143        -0.636966         -4.48279          17.7761 
+
+Log Likelihood function        -6.51010 
+
+AIC         23.0202 
+
+SIC         38.3332 
+
+RMSE        0.252149 
+MAE         0.178843 
+R2          0.986159 

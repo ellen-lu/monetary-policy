@@ -1,0 +1,24 @@
+SIMPLE1.OUT
+SIMPLE MAJORITY MODEL WITH HETEROGENEOUS INTERCEPTS
+
+SWEDEN
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+         2.51502         0.468799        -0.476546         0.592897 
+
+Standard errors
+        0.109550        0.0730934         0.144713        0.0471689 
+
+T statistics
+         22.9576          6.41370         -3.29305          12.5696 
+
+Log Likelihood function        -70.8001 
+
+AIC         149.600 
+
+SIC         159.078 
+
+RMSE        0.592897 
+MAE         0.493944 
+R2          0.456548 

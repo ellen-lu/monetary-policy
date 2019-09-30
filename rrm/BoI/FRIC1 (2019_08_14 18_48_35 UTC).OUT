@@ -1,0 +1,64 @@
+FRIC1.OUT
+SIMPLE MAJORITY WITH SIZE FRICTION
+
+ISRAEL
+
+1) ESTIMATES OF NONLINEAR MODEL
+Coefficients: 
+         5.36562         0.879994       -0.0787795          2.04781 
+
+Standard errors
+        0.238317        0.0426268         0.448846         0.118831 
+
+T statistics
+         22.5147          20.6441        -0.175516          17.2330 
+
+Log Likelihood function        -357.858 
+
+AIC         723.716 
+
+SIC         735.731 
+
+RMSE         2.46948 
+MAE          2.05689 
+
+
+2) ESTIMATES OF LINEAR MODEL
+Valid cases:                   149      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                 2430.609      Degrees of freedom:                 146
+R-squared:                   0.743      Rbar-squared:                     0.739
+Residual SS:               625.794      Std error of est:                 2.070
+F(2,146):                  210.535      Probability of F:                 0.000
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     5.363157    0.240723   22.279324     0.000       ---         ---  
+X1           0.880261    0.043059   20.443056     0.000    0.861100    0.861674
+X2          -0.078884    0.451510   -0.174711     0.862   -0.007359   -0.074549
+
+RMSE        2.049380 
+MAE         1.699255 
+R2          0.742536 
+
+
+3) ESTIMATES OF LINEAR MODEL WITH AD HOC SMOOTHING
+Valid cases:                   149      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                 2430.609      Degrees of freedom:                 145
+R-squared:                   0.987      Rbar-squared:                     0.987
+Residual SS:                31.356      Std error of est:                 0.465
+F(3,145):                 3698.314      Probability of F:                 0.000
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     0.417336    0.108730    3.838295     0.000       ---         ---  
+X1           0.895332    0.017077   52.429741     0.000    0.902023    0.991505
+X2           0.108074    0.017620    6.133706     0.000    0.105722    0.861674
+X3          -0.236000    0.101460   -2.326053     0.021   -0.022017   -0.074549
+
+RMSE        0.458740 
+MAE         0.276094 
+R2          0.987100 

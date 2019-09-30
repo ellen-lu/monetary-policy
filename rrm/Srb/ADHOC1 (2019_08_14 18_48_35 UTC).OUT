@@ -1,0 +1,24 @@
+ADHOC1.OUT
+MODEL WITH ADHOC SMOOTHING AND HETEROGENEOUS INTERCEPTS
+
+SWEDEN
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+        0.164544         0.930285        0.0418767       -0.0683194         0.173516 
+
+Standard errors
+       0.0870674        0.0320368        0.0259568        0.0446270        0.0138044 
+
+T statistics
+         1.88984          29.0380          1.61332         -1.53090          12.5697 
+
+Log Likelihood function         26.2711 
+
+AIC        -42.5421 
+
+SIC        -30.6949 
+
+RMSE        0.173516 
+MAE         0.115421 
+R2          0.953454 

@@ -1,0 +1,19 @@
+DATE VALUE
+
+Title:  Civilian Unemployment Rate
+Series ID: UNRATE
+Source:  U.S. Department of Labor: Bureau of Labor Statistics
+Release: The Employment Situation
+Seasonal Adjustment: Seasonally Adjusted
+Frequency: Monthly
+Units:  Percent
+Date Range:  1948.01 to 2007.02
+Notes:  Persons 16 years of age and older.
+  
+  The Bureau of Labor Statistics (BLS) announced several revisions to
+  the Household Survey on Friday Feb.7th 2003, with the release of the
+  January 2003 Data. They introduced the Census 2000 population controls
+  (which affect data back to 2000 and cause a break in the data in
+  January 2000), a new seasonal adjustment procedure, and new seasonal
+  factors back to January 1998. 
+

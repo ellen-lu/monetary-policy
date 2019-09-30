@@ -1,0 +1,392 @@
+/* DOVE1 */
+
+
+new;
+output file = DOVE1.OUT reset;
+outwidth 256;
+output off;
+
+
+/* READ AND TRANSFORM DATA */
+/* VOTES */
+load vote[26,114] = c:\codes\simple\boe\data\mpcvoting.txt;
+vote = vote';
+
+/* Compute preferred interest rates */
+prefrate = vote[1,.]; /* matrix of preferred interest rates from 1997.07 to 2006.09 */
+i = 3;
+do until i > rows(vote);
+    prefrate = prefrate|vote[i,1]~(vote[i,2:cols(vote)-1]+vote[i-1,cols(vote)])~vote[i,cols(vote)];
+    i = i+1;
+endo;
+prefrate = (prefrate.>0).*prefrate + (prefrate.<=0)*(-99); 
+nint = prefrate[.,cols(prefrate)];
+
+
+/* INFLATION */
+load target[224,2] = c:\codes\simple\boe\data\uktarget.txt; /* inflation target */
+load rpiysa[236,2] = c:\codes\simple\boe\data\ukrpiysa.txt; /* SA RPIY index from 1987.01 to 2006.08 */
+load rpiy[236,2] = c:\codes\simple\boe\data\ukrpiy.txt; /* NA RPIY index from 1987.01 to 2006.08 */
+load rpi[236,2] = c:\codes\simple\boe\data\ukrpi.txt; /* NA RPI index from 1987.01 to 2006.08 */
+load cpi[224,2] = c:\codes\simple\boe\data\ukcpi.txt; /* NA CPI index from 1988.01 to 2006.08 */
+load rpix[20,12] = c:\codes\simple\boe\data\ukrpix.txt; /* RPIX index from 1987.01 to 2006.12 */
+rpix = reshape(rpix,240,1);
+rpix = rpi[.,1]~trimr(rpix,0,4);
+cpi = -99*ones(12,2)|cpi;
+
+/* Compute year-to-year RPIY inflation rate */
+rpiyinf = rpiy[13:rows(rpiy),1]~(100*ln(rpiy[13:rows(rpiy),2]./rpiy[1:rows(rpiy)-12,2])); 
+rpiyinf = rpiyinf[109:rows(rpiyinf),.]; /* inflation rate between 1997.01 and 2006.08 */
+
+/* Compute year-to-year RPI inflation rate */
+rpiinf = rpi[13:rows(rpi),1]~(100*ln(rpi[13:rows(rpi),2]./rpi[1:rows(rpi)-12,2])); 
+rpiinf = rpiinf[109:rows(rpiinf),.]; /* inflation rate between 1997.01 and 2006.08 */
+
+/* Compute year-to-year CPI inflation rate */
+cpiinf = cpi[13:rows(cpi),1]~(100*ln(cpi[13:rows(cpi),2]./cpi[1:rows(cpi)-12,2])); 
+cpiinf = cpiinf[109:rows(cpiinf),.]; /* inflation rate between 1997.01 and 2006.08 */
+
+/* Compute year-to-year RPIX inflation rate */
+rpixinf = rpix[13:rows(rpix),1]~(100*ln(rpix[13:rows(rpix),2]./rpix[1:rows(rpix)-12,2])); 
+rpixinf = rpixinf[109:rows(rpixinf),.]; /* inflation rate between 1997.01 and 2006.08 */
+
+
+
+/* UNEMPLOYMENT */
+load ukun[234,2] = c:\codes\simple\boe\data\ukun.txt; /* SA unemployment rate from 1987.01 to 2006.06 */
+un = ukun;
+
+/* Compute NAIRU and the unemployment gap using the HP filter */
+hpobs = un[.,1];
+hpun = hpnew(un[.,2],14400);
+hpun = hpobs~hpun;
+
+
+/* PUT DATA SET TOGETHER */
+datte = cpiinf[1:rows(cpiinf)-2,1];
+const = ones(rows(datte),1);
+target = trimr(target[.,2],108,2);
+cpiinf = trimr(cpiinf[.,2],0,2);
+rpiinf = trimr(rpiinf[.,2],0,2);
+rpixinf = trimr(rpixinf[.,2],0,2);
+hpun = trimr(hpun[.,2],120,0);
+
+data = real(datte~target~rpixinf~rpiinf~hpun);
+data = data[1:57,.]|data[57,.]|data[58:rows(data),.]; /* account for double observation in Sep. 2001 */
+data = trimr(data,6,0); 
+
+
+/* Select data */
+datte = data[.,1];
+target = data[.,2];
+cpiinf = data[.,4]; /* use RPI inflation */
+cpiinf = data[.,3]; /* use RPIX inflation */
+hpun = data[.,5];
+nint = trimr(nint,1,3); /* because data on inflation and output ends three months earlier than voting data */
+
+/* Separate the sample */
+nob = rows(nint);
+indb = zeros(nob,1);
+indc = zeros(nob,1); 
+indx = zeros(nob,1);
+i = 2;
+do until i > nob;
+    if nint[i,1] == nint[i-1,1];
+        indx[i,1] = 1;
+    else;
+        if nint[i,1] >= nint[i-1,1];
+            indc[i,1] = 1;
+        else;
+            indb[i,1] = 1;
+        endif;
+    endif;
+i = i+1;
+endo;
+indx[1,1]=1;
+
+datte = datte[2:nob];
+target = target[2:nob];
+cpiinf = cpiinf[2:nob];
+hpun = hpun[2:nob];
+pint = nint[1:nob-1];
+nint = nint[2:nob];
+indb = indb[2:nob];
+indc = indc[2:nob];
+indx = indx[2:nob];
+nob = nob-1;
+
+
+/* ESTIMATE REACTION FUNCTION */
+library optmum;
+#include optmum.ext;
+
+_opgtol = 1.e-6;                  @ convergence criterion for gradient @
+_opalgr = 2;                      @ selects algorithm for optimization @
+
+
+/* PROCEDURE TO SET STARTING VALUES */
+proc startval;
+    local th;
+    let th[5,1] =
+      2.04671          .30167         0.288724        -0.114671         0.916934 ; 
+    retp(th);
+endp;
+
+x = startval;
+kp = 1;
+
+output off;
+{x,f,g,retcode} = optmum(&ofn,startval);
+output file=DOVE1.OUT on;
+
+kp = 2;
+x[2] = x[1] + abs(x[2]);
+x[5] = abs(x[5]);
+
+
+/* PRINT FINAL ESTIMATES */
+format /m3 /ro 16,6;
+"DOVE1.OUT";
+"AGENDA-SETTING MODEL WITH HETEROGENEOUS INTERCEPTS AND DOVISH CHAIRMAN";
+"";"UNITED KINGDOM";
+
+"";"1) ESTIMATES OF NONLINEAR MODEL";
+"   Coefficients: ";x';
+hs = hessp(&ofn,x);
+hs = real(hs);
+vg = invpd(hs);
+save x;
+save vg;
+
+cstar  = (pint - x[1] - x[3]*cpiinf - x[4]*hpun)/x[5];
+bstar  = (pint - x[2] - x[3]*cpiinf - x[4]*hpun)/x[5];
+bbstar = (pint - (2*x[2]-x[1]) - x[3]*cpiinf - x[4]*hpun)/x[5];
+fitc = x[1] + x[3]*cpiinf + x[4]*hpun + x[5]*pdfn(cstar)/(1-cdfn(cstar));
+fitc = fitc.*(1-cdfn(cstar));
+fitb1 = 2*x[2] + 2*x[3]*cpiinf + 2*x[4]*hpun - pint + 2*x[5]*(pdfn(bbstar)-pdfn(bstar))/(cdfn(bstar)-cdfn(bbstar));
+fitb1 = fitb1.*(cdfn(bstar)-cdfn(bbstar));
+fitb2 = x[1] + x[3]*cpiinf + x[4]*hpun - x[5]*pdfn(bbstar)/cdfn(bbstar);
+fitb2 = fitb2.*cdfn(bbstar);
+fitx = pint.*(cdfn(cstar)-cdfn(bstar));
+fit = fitc + fitb1 + fitb2 + fitx;
+
+ess = sumc(fit^2) - rows(nint)*meanc(nint)^2;
+tss = sumc(nint^2) - rows(nint)*meanc(nint)^2;
+res = nint-fit;
+rmse = real((sumc(res.^2)/rows(nint))^.5);
+mae = sumc(abs(res))/rows(nint);
+r2 = ess/tss;
+
+format /m3 /ro 16,6;
+"";"Standard errors";sqrt(diag(vg))';
+"";"T statistics";(x')./(sqrt(diag(vg))');
+"";"Log Likelihood function";;-f;
+"";"AIC";;2*rows(x)-2*(-f);
+"";"SIC";;ln(nob)*rows(x)-2*(-f);
+"";"RMSE";;rmse;
+"MAE ";;mae;   
+
+format /m1 /rd 16,6;
+"";"";"2) ESTIMATES OF LINEAR MODEL";
+dep = ones(nob,1)~cpiinf~hpun;
+call ols(0,nint,dep);
+
+b = inv(dep'*dep)*dep'*nint;
+yhat1 = dep*b;
+ess = sumc(yhat1^2) - rows(nint)*meanc(nint)^2;
+tss = sumc(nint^2) - rows(nint)*meanc(nint)^2;
+r2 = ess/tss;
+res = nint-yhat1;
+rmse = real((sumc(res.^2)/rows(nint))^.5);
+mae = sumc(abs(res))/rows(nint);
+"";"RMSE";;rmse;
+"MAE ";;mae;  
+"R2  ";;r2;
+
+"";"";"3) ESTIMATES OF LINEAR MODEL WITH AD HOC SMOOTHING";
+dep = ones(nob,1)~pint~cpiinf~hpun;
+call ols(0,nint,dep);
+
+b = inv(dep'*dep)*dep'*nint;
+yhat2 = dep*b;
+ess = sumc(yhat2^2) - rows(nint)*meanc(nint)^2;
+tss = sumc(nint^2) - rows(nint)*meanc(nint)^2;
+r2 = ess/tss;
+res = nint-yhat2;
+rmse = real((sumc(res.^2)/rows(nint))^.5);
+mae = sumc(abs(res))/rows(nint);
+"";"RMSE";;rmse;
+"MAE ";;mae;  
+"R2  ";;r2;
+
+
+/* PLOT FITTED VALUES */
+library optmum,pgraph;
+xy(seqa(1,1,rows(nint)),nint~fit~yhat1~yhat2);
+dove1 = datte~nint~fit~yhat1~yhat2;
+save dove1;
+dos del *.tkf;
+output off;
+end;
+
+
+/* FILTER DATA USING HP FILTER (Code written by Morten O. Ravn) */
+proc hpnew(dat,lambda);
+local u1, u, l, ff, t, v11, v22, v12, x, z, v, tt, d, i, m1, m2, de, i1, ib, e1, e2, b11, b12, b22, jj, hu,uu;
+
+l=lambda;
+u1 = dat;
+ff=rows(dat');
+t = rows(dat);
+ 
+v11 = 1;
+v22 = 1;
+v12 = 0;
+i=3; 
+v=zeros(t,3); 
+tt =zeros(t,ff); 
+d = zeros(t,ff);
+do until i>t;
+	x=v11;
+	z=v12;
+ 	v11=(1/L)+4*(x-z)+v22;
+ 	v12 = 2*x -z;
+ 	v22=x;
+ 	de = v11*v22-v12*v12;
+ 	v[i,1] = v22/de;
+ 	v[i,3] = v11/de;
+ 	v[i,2] = -v12/de;
+ 	x = v11+1;
+ 	z=v11;
+ 	v11 = v11-(v11*v11)/x;
+ 	v22 = v22-(v12*v12)/x;
+ 	v12 = v12-(z*v12)/x;
+ 	i=i+1;
+endo;
+
+u=u1;
+m1=u[2,.]; 
+m2 = u[1,.];
+i=3;
+do until i>t;
+	x = m1;
+ 	m1=2*m1-m2;
+ 	m2=x;
+ 	tt[i-1,.] = v[i,1]*m1+v[i,2]*m2;
+ 	d[i-1,.] = v[i,2]*m1+v[i,3]*m2;
+ 	de = v[i,1]*v[i,3]-v[i,2]*v[i,2];
+ 	v11 = v[i,3]/de;
+ 	v12 = -v[i,2]/de;
+ 	z = (u[i,.]-m1)/(v11+1);
+ 	m1=m1+v11*z;
+ 	m2=m2+v12*z;
+ 	i=i+1;
+endo;
+
+tt[t,.] = m1;
+tt[t-1,.] = m2;
+m1 = u[t-1,.];
+m2 = u[t,.];
+i=t-2;
+do until i<1;
+ 	i1=i+1;
+ 	ib=t-i+1;
+ 	x=m1;
+ 	m1=2*m1-m2;
+ 	m2=x;
+  	if i>2;
+   		e1 = v[ib,3]*m2+v[ib,2]*m1+tt[i,.];
+   		e2 = v[ib,2]*m2+v[ib,1]*m1+d[i,.];
+   		b11 = v[ib,3]+v[i1,1];
+   		b12 = v[ib,2]+v[i1,2];
+   		b22 = v[ib,1]+v[i1,3];
+   		de = b11*b22-b12*b12;
+   		tt[i,.] = (-b12*e1+b11*e2)/de;
+  	endif;
+	de = v[ib,1]*v[ib,3]-v[ib,2]*v[ib,2];
+ 	v11 = v[ib,3]/de;
+ 	v12 = -v[ib,2]/de;
+ 	z = (u[i,.]-m1)/(v11+1);
+ 	m1 = m1 +v11*z;
+ 	m2 = m2 +v12*z;
+ 	i=i-1;
+endo;
+
+tt[1,.] = m1;
+tt[2,.] = m2;
+
+i=1;
+do until i>t;
+ 	d[i,.] = u[i,.]-tt[i,.];
+ 	i=i+1;
+endo;
+
+hu=tt;
+uU = d-ones(t,ff)*meanc(D);
+retp(uu);
+endp;
+
+
+
+/* THIS PROCEDURE EVALUATES THE LIKELIHOOD FUNCTION */
+proc ofn(th);
+local pistar2,pistar4,beta1,beta2,sigu,ppuc,ppub,expc,expb,expd,cstar,bstar,expx,bigb,bigd,fy,it,rho;
+
+
+/* READ INITIAL VALUES */
+th = real(th);
+pistar2 = th[1];
+if kp ==1;
+    pistar4 = th[1] + abs(th[2]);
+else;
+    pistar4 = th[2];
+endif;
+beta1 = th[3];
+beta2 = th[4];
+sigu = abs(th[5]);
+rho = .9999;
+
+/* CALCULATE LOG LIKELIHOOD FUNCTION OF i(t) */
+it = 1;
+fy = 0;
+
+do until it > rows(nint);
+    if indc[it] == 1; /* Increase */
+        ppuc = (nint[it] - pistar2 - beta1*cpiinf[it] - beta2*hpun[it])/sigu;
+        expc = 1/sigu*pdfn(ppuc);
+		expc = subscat(expc,0,1.e-6);
+        fy = fy + ln(expc);
+    endif;
+
+    if indx[it] == 1; /* No change */
+        cstar = (pint[it] - pistar2 - beta1*cpiinf[it] - beta2*hpun[it])/sigu;
+        bstar = (pint[it] - pistar4 - beta1*cpiinf[it] - beta2*hpun[it])/sigu;
+        expx = cdfn(cstar)-cdfn(bstar);
+		expx = subscat(expx,0,1.e-6);
+        fy = fy + ln(expx);
+    endif;
+
+    if indb[it] == 1; /* Decrease */
+        bigb = nint[it] - (pistar2 + beta1*cpiinf[it] + beta2*hpun[it]) - (rho/2)*(nint[it] - (2*pistar4 + 2*beta1*cpiinf[it] + 2*beta2*hpun[it] - pint[it]));
+        bigb = bigb/(sigu*(1-rho^2)^.5);
+        ppub = ((nint[it] + pint[it])/2 - pistar4 - beta1*cpiinf[it] - beta2*hpun[it])/sigu;
+        expb = (1/2)*(1/sigu)*pdfn(ppub);
+
+        expb = expb*cdfn(bigb);
+            
+       	bigd = nint[it] - (2*pistar4 + 2*beta1*cpiinf[it] + 2*beta2*hpun[it] - pint[it]) - 2*rho*(nint[it] - (pistar2 + beta1*cpiinf[it] + beta2*hpun[it]));
+        bigd = bigd/(2*sigu*(1-rho^2)^.5);
+        ppuc = (nint[it] - pistar2 - beta1*cpiinf[it] - beta2*hpun[it])/sigu;
+        expc = (1/sigu)*pdfn(ppuc);
+
+       	expd = expc*cdfn(bigd);
+
+        expb = expb + expd;
+		expb = subscat(expb,0,1.e-6);
+        fy = fy + ln(expb);
+    endif;
+	it=it+1;
+endo;
+
+retp(-fy);
+endp;

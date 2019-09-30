@@ -1,0 +1,24 @@
+SIMPLE1.OUT
+SIMPLE MAJORITY MODEL WITH HETEROGENEOUS INTERCEPTS
+
+ISRAEL
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+         5.36316         0.880261       -0.0788878          2.04938 
+
+Standard errors
+        0.238236        0.0426067         0.401801         0.118716 
+
+T statistics
+         22.5119          20.6601        -0.196336          17.2629 
+
+Log Likelihood function        -318.335 
+
+AIC         644.670 
+
+SIC         656.686 
+
+RMSE         2.04938 
+MAE          1.69926 
+R2          0.742537 

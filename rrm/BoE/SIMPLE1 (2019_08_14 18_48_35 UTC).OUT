@@ -1,0 +1,25 @@
+SIMPLE1.OUT
+SIMPLE MAJORITY MODEL WITH HETEROGENEOUS INTERCEPTS
+
+UK
+
+1) ESTIMATES OF LINEAR MODEL
+Coefficients: 
+         4.26186         0.339252         -3.30268          1.01324 
+
+Standard errors
+        0.703854         0.298706         0.618938        0.0689434 
+
+T statistics
+         6.05502          1.13574         -5.33605          14.6967 
+
+Log Likelihood function        -154.666 
+
+AIC         317.332 
+
+SIC         328.060 
+
+RMSE         1.01324 
+MAE         0.884739 
+R2          0.217238 
+        0.151769 

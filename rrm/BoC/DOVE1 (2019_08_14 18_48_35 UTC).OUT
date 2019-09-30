@@ -1,0 +1,64 @@
+DOVE1.OUT
+AGENDA-SETTING MODEL WITH HETEROGENEOUS INTERCEPTS AND DOVISH CHAIRMAN
+
+CANADA
+
+1) ESTIMATES OF NONLINEAR MODEL
+   Coefficients: 
+         1.37696          3.25710         0.388230        -0.134799         0.940978 
+
+Standard errors
+        0.461426         0.413537         0.170902         0.297751         0.119841 
+
+T statistics
+         2.98414          7.87620          2.27166        -0.452723          7.85192 
+
+Log Likelihood function        -67.5311 
+
+AIC         145.062 
+
+SIC         154.622 
+
+RMSE        0.867265 
+MAE         0.561268 
+
+
+2) ESTIMATES OF LINEAR MODEL
+Valid cases:                    50      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                   38.026      Degrees of freedom:                  47
+R-squared:                   0.050      Rbar-squared:                     0.010
+Residual SS:                36.124      Std error of est:                 0.877
+F(2,47):                     1.237      Probability of F:                 0.299
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     2.618457    0.353517    7.406877     0.000       ---         ---  
+X1           0.230741    0.147727    1.561942     0.125    0.222102    0.222530
+X2          -0.041219    0.262005   -0.157321     0.876   -0.022370   -0.026618
+
+RMSE        0.849990 
+MAE         0.714620 
+R2          0.050020 
+
+
+3) ESTIMATES OF LINEAR MODEL WITH AD HOC SMOOTHING
+Valid cases:                    50      Dependent variable:                   Y
+Missing cases:                   0      Deletion method:                   None
+Total SS:                   38.026      Degrees of freedom:                  46
+R-squared:                   0.939      Rbar-squared:                     0.935
+Residual SS:                 2.323      Std error of est:                 0.225
+F(3,46):                   235.626      Probability of F:                 0.000
+
+                         Standard                 Prob   Standardized  Cor with
+Variable     Estimate      Error      t-value     >|t|     Estimate    Dep Var
+-------------------------------------------------------------------------------
+CONSTANT     0.178295    0.130805    1.363055     0.180       ---         ---  
+X1           0.895179    0.034604   25.869291     0.000    0.958282    0.967560
+X2           0.055072    0.038473    1.431434     0.159    0.053010    0.222530
+X3           0.006252    0.067189    0.093055     0.926    0.003393   -0.026618
+
+RMSE        0.215562 
+MAE         0.172867 
+R2          0.938901 
