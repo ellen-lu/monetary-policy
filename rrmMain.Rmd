@@ -35,25 +35,6 @@ warnings.filterwarnings('ignore')
 As it is, $\theta = (a_R,a_L,a_C,b,c,\mu,s,p_C,\sigma,\epsilon)$.
 
 ```{python}
-def print_table(**kwargs):
-    snoop_dog(y=5,**kwargs)
-
-def snoop_dog(x=1,y=2):
-    '''a+=1
-    kwargs = {'a':a,'x':x,'y':y}
-    if a == 3:
-        return
-    return snoop_dog(**kwargs)'''
-    print(x+y)
-    
-def shwoop_dog(m=3,n=2):
-    assert(m<5)
-    print(m-n)
-    
-snoop_dog(x=5)
-```
-
-```{python}
 class Nash(Bank):
 
     def I(self,a,b,c):
