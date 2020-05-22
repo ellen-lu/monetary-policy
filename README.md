@@ -1,2 +1,2 @@
 # monetary-policy
-Working code for Monetary Policy paper with Giri Parameswaran and Carola Binder. The 'rrm' folder contains the data from Riboni and Ruge-Murcia's paper, *Monetary Policy by Committee: Consensus, Chairman Dominance, or Simple Majority?*. 
+Working code for Monetary Policy paper with Giri Parameswaran and Carola Binder. The 'rrm' folder contains the data from Riboni and Ruge-Murcia's paper, *Monetary Policy by Committee: Consensus, Chairman Dominance, or Simple Majority?*. The ipython notebook file 'rrm_main' contains the most recently updated code, and references both papers linked to in this repo. Both papers are still in progress. 
