@@ -1,7 +1,6 @@
+# apologies for the camel case, still making the notation consistent
 
-# coding: utf-8
-
-# In[1]:
+# this script has functions for importing and cleaning the data
 
 import pandas as pd
 import numpy as np

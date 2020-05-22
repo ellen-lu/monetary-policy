@@ -1,8 +1,6 @@
-# %%
+# apologies for the camel case, still making the notation consistent
 
-# coding: utf-8
-
-# %%
+# this script builds the larger bank class, and some children for alternative decision making procedures
 
 from tableBuilder import *
 import math
@@ -16,7 +14,6 @@ import matplotlib.pyplot as plt
 from debug import ipsh
 
 
-# %%
 class Bank():
     
     def __init__(self, bank, dropCols=[], cpiType='TotalCPI', lam=129600, trunc=(0,None),F=logistic.cdf,f=logistic.pdf,utility=None):
