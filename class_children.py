@@ -2,7 +2,7 @@
 
 # this script builds the larger bank class, and some children for alternative decision making procedures
 
-from tableBuilder import *
+from table_builder import *
 import math
 from scipy.stats import norm
 from scipy.stats import logistic
