@@ -56,7 +56,7 @@ def makeMatrix(lam,size):
 # call unRateDiffs to get a tuple of vectors (output gap, tau)
 def unRateDiffs(y,focs):
     
-    y = y.as_matrix()
+    y = y.to_numpy()
     tau = np.linalg.solve(focs,y)
     
     return((y-tau,tau))
