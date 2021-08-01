@@ -114,17 +114,17 @@ def inflation(cpiData,column):
 def getTarget(bank, trunc=(0,None)):
     
     if bank == 'BoC':
-        target = pd.read_csv('rrm\\BoC\\Data\\Target.txt',delimiter = ' ',header = None)
+        target = pd.read_csv('rrm/BoC/Data/Target.txt',delimiter = ' ',header = None)
         target.columns = ['Date','Day','Target','Change']
         target = target.drop(['Day'],axis=1)
         
     elif bank == 'BoE':
-        target = pd.read_csv('rrm\\BoE\\Data\\UKTARGET.txt',delimiter = ' ',header = None)
+        target = pd.read_csv('rrm/BoE/Data/UKTARGET.txt',delimiter = ' ',header = None)
         target.columns = ['Date','Target']
         target['Change'] = target['Target']-target['Target'].shift(1); target['Change'][0] = 0
         
     elif bank == 'Fed2':
-        target = pd.read_csv('rrm\\Fed2\\Data\\Target2.txt',delimiter = ' ',header = None)
+        target = pd.read_csv('rrm/Fed2/Data/Target2.txt',delimiter = ' ',header = None)
         target.columns = ['Date','Day','Target','Change']
         target = target.drop(['Day'],axis=1)
         
@@ -141,21 +141,21 @@ def getTarget(bank, trunc=(0,None)):
 def getInflation(bank, cpiType='CoreCPI', trunc=(0,None)):
     
     if bank == 'BoC':
-        cpi = pd.read_csv('rrm\\BoC\\Data\\CPI.txt',delimiter = ' ',header = None)
+        cpi = pd.read_csv('rrm/BoC/Data/CPI.txt',delimiter = ' ',header = None)
         cpi.columns = ['Date','TotalCPI','TotalCPI_SA','CoreCPI']
         cpi['Date'] = cpi['Date'].apply(dateInc)
         cpi = inflation(cpi,cpiType)
         cpi = cpi[trunc[0]:trunc[1]]
         
     elif bank == 'BoE':
-        cpi = pd.read_csv('rrm\\BoE\\Data\\UKRPI.txt',delimiter = ' ',header = None)
+        cpi = pd.read_csv('rrm/BoE/Data/UKRPI.txt',delimiter = ' ',header = None)
         cpi.columns = ['Date','RPI']
         cpi['Date'] = cpi['Date'].apply(dateInc)
         cpi = inflation(cpi,'RPI')
         cpi = cpi[trunc[0]:trunc[1]]
         
     elif bank == 'Fed2':
-        cpi = pd.read_csv('rrm\\Fed2\\Data\\CPIAUCNS.txt',delimiter = ' ',header = None)
+        cpi = pd.read_csv('rrm/Fed2/Data/CPIAUCNS.txt',delimiter = ' ',header = None)
         cpi.columns = ['Date','CPI']
         cpi['Date'] = cpi['Date'].apply(dateInc)
         cpi = inflation(cpi,'CPI')
@@ -169,19 +169,19 @@ def getInflation(bank, cpiType='CoreCPI', trunc=(0,None)):
 def getOutGap(bank, lam=129600, trunc=(0,None)):
     
     if bank == 'BoC':
-        un = pd.read_csv('rrm\\BoC\\Data\\UNRATE.txt',delimiter = ' ',header = None)
+        un = pd.read_csv('rrm/BoC/Data/UNRATE.txt',delimiter = ' ',header = None)
         un.columns = ['Date','UnRate']
         un['Date'] = un['Date'].apply(dateInc)
         un = un[trunc[0]:trunc[1]]
         
     elif bank == 'BoE':
-        un = pd.read_csv('rrm\\BoE\\Data\\UKUN.txt',delimiter = ' ',header = None)
+        un = pd.read_csv('rrm/BoE/Data/UKUN.txt',delimiter = ' ',header = None)
         un.columns = ['Date','UnRate']
         un['Date'] = un['Date'].apply(dateInc)
         un = un[trunc[0]:trunc[1]]
         
     elif bank == 'Fed2':
-        un = pd.read_csv('rrm\\Fed2\\Data\\UNRATE.txt',delimiter = ' ',header = None)
+        un = pd.read_csv('rrm/Fed2/Data/UNRATE.txt',delimiter = ' ',header = None)
         un.columns = ['Date','UnRate']
         un['Date'] = un['Date'].apply(dateInc)
         un = un[trunc[0]:trunc[1]]
